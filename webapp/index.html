@@ -3,8 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
         <meta name="mobile-web-app-capable" content="yes">
+        <!-- Mobile meta tags to go in head-->
+        <meta name="HandheldFriendly" content="True">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="MobileOptimized" content="320"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta http-equiv="cleartype" content="on">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
@@ -13,6 +18,11 @@
         #map {
             width: 1275px;
             height: 673px;
+        }
+        .leaflet-popup-content {
+        min-width: 200px;
+        min-height: 100px;
+        overflow-y: scroll;
         }
         </style>
         <title></title>
@@ -58,7 +68,7 @@
         var map = L.map('map', {
             crs: crs,
             continuousWorld: false,
-            worldCopyJump: false, 
+            worldCopyJump: false,
             zoomControl:true, maxZoom:28, minZoom:1
         }).fitBounds([[52.15614095009195,1.5963566404984193],[52.15866382862367,1.604158383943411]]);
         var hash = new L.Hash(map);
@@ -173,7 +183,7 @@
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1.0,
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(133,182,111,1.0)',
@@ -227,7 +237,7 @@
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1.0,
                 fillOpacity: 0,
                 interactive: true,
             }
@@ -422,7 +432,7 @@
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1.0,
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(145,112,39,1.0)',
@@ -475,7 +485,7 @@
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1.0,
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(238,226,3,1.0)',
@@ -528,7 +538,7 @@
                 dashArray: '',
                 lineCap: 'butt',
                 lineJoin: 'miter',
-                weight: 1.0, 
+                weight: 1.0,
                 fill: true,
                 fillOpacity: 1,
                 fillColor: 'rgba(3,180,21,1.0)',
@@ -735,7 +745,7 @@
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Taps_9_0(feature));
+                return L.Marker(latlng, style_Taps_9_0(feature));
             },
         });
         bounds_group.addLayer(layer_Taps_9);
@@ -1064,7 +1074,7 @@
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Lighting_12_0(feature));
+                return L.Marker(latlng, style_Lighting_12_0(feature));
             },
         });
         bounds_group.addLayer(layer_Lighting_12);
@@ -1124,7 +1134,7 @@
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_Downpipe_13_0(feature));
+                return L.Marker(latlng, style_Downpipe_13_0(feature));
             },
         });
         bounds_group.addLayer(layer_Downpipe_13);
