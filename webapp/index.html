@@ -8,6 +8,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
         <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         #map {
@@ -33,6 +35,9 @@
         <script src="js/leaflet-measure.js"></script>
         <script src="js/proj4.js"></script>
         <script src="js/proj4leaflet.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
         <script src="data/Driveway_11.js"></script>
         <script src="data/Garages_12.js"></script>
         <script src="data/BuildingsNG_13.js"></script>
@@ -55,7 +60,7 @@
             continuousWorld: false,
             worldCopyJump: false, 
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[52.15673682910786,1.5977883449511991],[52.15817937971901,1.6019612094603635]]);
+        }).fitBounds([[52.15670488923289,1.5976843590113887],[52.158219567986144,1.6020658687679752]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
@@ -180,7 +185,12 @@
                         <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Material'] !== null ? autolinker.link(feature.properties['Material'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Material</th>\
+                        <td>' + (feature.properties['Material'] !== null ? autolinker.link(feature.properties['Material'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Areas</th>\
+                        <td>' + (feature.properties['Areas'] !== null ? autolinker.link(feature.properties['Areas'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -474,7 +484,12 @@
                         <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Descriptio'] !== null ? autolinker.link(feature.properties['Descriptio'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Description</th>\
+                        <td>' + (feature.properties['Descriptio'] !== null ? autolinker.link(feature.properties['Descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PavingArea</th>\
+                        <td>' + (feature.properties['PavingArea'] !== null ? autolinker.link(feature.properties['PavingArea'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -515,7 +530,8 @@
                         <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Area (sq m)</th>\
+                        <td>' + (feature.properties['Area'] !== null ? autolinker.link(feature.properties['Area'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
@@ -556,23 +572,119 @@
                         <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
-                        <td colspan="2">' + (feature.properties['Material'] !== null ? autolinker.link(feature.properties['Material'].toLocaleString()) : '') + '</td>\
+                        <th scope="row">Material</th>\
+                        <td>' + (feature.properties['Material'] !== null ? autolinker.link(feature.properties['Material'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_Fences_18_0() {
-            return {
+        function style_Fences_18_0(feature) {
+            switch(String(feature.properties['Material'])) {
+                case 'Brick':
+                    return {
                 pane: 'pane_Fences_18',
                 opacity: 1,
-                color: 'rgba(112,75,58,1.0)',
+                color: 'rgba(233,11,15,1.0)',
                 dashArray: '',
                 lineCap: 'square',
                 lineJoin: 'bevel',
                 weight: 2.0,
                 fillOpacity: 0,
                 interactive: true,
+            }
+                    break;
+                case 'Closed Panel and Concrete':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(139,57,27,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Closed Panel and Timber':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(124,92,93,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Timber Picket':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(234,14,14,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Timber Rails':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(237,175,113,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Weave Panels and Timber':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(219,30,42,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                case 'Wire Fence':
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'round',
+                lineJoin: 'round',
+                weight: 3.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Fences_18',
+                opacity: 1,
+                color: 'rgba(208,54,92,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 2.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+                    break;
             }
         }
         map.createPane('pane_Fences_18');
@@ -1070,8 +1182,152 @@
             };
             title.addTo(map);
         var baseMaps = {};
-        L.control.layers(baseMaps,{'<img src="legend/Downpipe_23.png" /> Downpipe': layer_Downpipe_23,'Lighting<br /><table><tr><td style="text-align: center;"><img src="legend/Lighting_22_CoachLight0.png" /></td><td>Coach Light</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_FlushMountedCeilingLight1.png" /></td><td>Flush Mounted Ceiling Light</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_Spotlight2.png" /></td><td>Spotlight</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_Swanneck3.png" /></td><td>Swan neck</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_4.png" /></td><td></td></tr></table>': layer_Lighting_22,'Manholes<br /><table><tr><td style="text-align: center;"><img src="legend/Manholes_21_Rectangular0.png" /></td><td>Rectangular</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_Round1.png" /></td><td>Round</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_Square2.png" /></td><td>Square</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_3.png" /></td><td></td></tr></table>': layer_Manholes_21,'<img src="legend/Pipes_20.png" /> Pipes': layer_Pipes_20,'Taps<br /><table><tr><td style="text-align: center;"><img src="legend/Taps_19_HozelockReel0.png" /></td><td>Hozelock Reel</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_Lever1.png" /></td><td>Lever</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_Normal2.png" /></td><td>Normal</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_TBC3.png" /></td><td>TBC</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_4.png" /></td><td></td></tr></table>': layer_Taps_19,'<img src="legend/Fences_18.png" /> Fences': layer_Fences_18,'<img src="legend/Grass_17.png" /> Grass': layer_Grass_17,'<img src="legend/Paving_16.png" /> Paving': layer_Paving_16,'<img src="legend/Pathways_15.png" /> Pathways': layer_Pathways_15,'RoofLines<br /><table><tr><td style="text-align: center;"><img src="legend/RoofLines_14_0.png" /></td><td></td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_DormWindowFlashing1.png" /></td><td>Dorm Window Flashing</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Fasciawithflashing2.png" /></td><td>Fascia with flashing</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Gable3.png" /></td><td>Gable</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_GutterLine4.png" /></td><td>GutterLine</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Hip5.png" /></td><td>Hip</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Ridge6.png" /></td><td>Ridge</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Valley7.png" /></td><td>Valley</td></tr></table>': layer_RoofLines_14,'<img src="legend/BuildingsNG_13.png" /> BuildingsNG': layer_BuildingsNG_13,'<img src="legend/Garages_12.png" /> Garages': layer_Garages_12,'<img src="legend/Driveway_11.png" /> Driveway': layer_Driveway_11,"Southern Area2_georeferenced": layer_SouthernArea2_georeferenced_10,"Northern Area2a_georeferenced": layer_NorthernArea2a_georeferenced_9,"TM45NW": layer_TM45NW_8,"TM45SW": layer_TM45SW_7,"TM45SE": layer_TM45SE_6,"TM45NE": layer_TM45NE_5,"TM23NE": layer_TM23NE_4,"TM33NW": layer_TM33NW_3,"TM33NE": layer_TM33NE_2,"TM35SE": layer_TM35SE_1,"TM35NE": layer_TM35NE_0,},{collapsed:false}).addTo(map);
+        L.control.layers(baseMaps,{'<img src="legend/Downpipe_23.png" /> Downpipe': layer_Downpipe_23,'Lighting<br /><table><tr><td style="text-align: center;"><img src="legend/Lighting_22_CoachLight0.png" /></td><td>Coach Light</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_FlushMountedCeilingLight1.png" /></td><td>Flush Mounted Ceiling Light</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_Spotlight2.png" /></td><td>Spotlight</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_Swanneck3.png" /></td><td>Swan neck</td></tr><tr><td style="text-align: center;"><img src="legend/Lighting_22_4.png" /></td><td></td></tr></table>': layer_Lighting_22,'Manholes<br /><table><tr><td style="text-align: center;"><img src="legend/Manholes_21_Rectangular0.png" /></td><td>Rectangular</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_Round1.png" /></td><td>Round</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_Square2.png" /></td><td>Square</td></tr><tr><td style="text-align: center;"><img src="legend/Manholes_21_3.png" /></td><td></td></tr></table>': layer_Manholes_21,'<img src="legend/Pipes_20.png" /> Pipes': layer_Pipes_20,'Taps<br /><table><tr><td style="text-align: center;"><img src="legend/Taps_19_HozelockReel0.png" /></td><td>Hozelock Reel</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_Lever1.png" /></td><td>Lever</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_Normal2.png" /></td><td>Normal</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_TBC3.png" /></td><td>TBC</td></tr><tr><td style="text-align: center;"><img src="legend/Taps_19_4.png" /></td><td></td></tr></table>': layer_Taps_19,'Fences<br /><table><tr><td style="text-align: center;"><img src="legend/Fences_18_Brick0.png" /></td><td>Brick</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_ClosedPanelandConcrete1.png" /></td><td>Closed Panel and Concrete</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_ClosedPanelandTimber2.png" /></td><td>Closed Panel and Timber</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_TimberPicket3.png" /></td><td>Timber Picket</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_TimberRails4.png" /></td><td>Timber Rails</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_WeavePanelsandTimber5.png" /></td><td>Weave Panels and Timber</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_WireFence6.png" /></td><td>Wire Fence</td></tr><tr><td style="text-align: center;"><img src="legend/Fences_18_7.png" /></td><td></td></tr></table>': layer_Fences_18,'<img src="legend/Grass_17.png" /> Grass': layer_Grass_17,'<img src="legend/Paving_16.png" /> Paving': layer_Paving_16,'<img src="legend/Pathways_15.png" /> Pathways': layer_Pathways_15,'RoofLines<br /><table><tr><td style="text-align: center;"><img src="legend/RoofLines_14_0.png" /></td><td></td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_DormWindowFlashing1.png" /></td><td>Dorm Window Flashing</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Fasciawithflashing2.png" /></td><td>Fascia with flashing</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Gable3.png" /></td><td>Gable</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_GutterLine4.png" /></td><td>GutterLine</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Hip5.png" /></td><td>Hip</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Ridge6.png" /></td><td>Ridge</td></tr><tr><td style="text-align: center;"><img src="legend/RoofLines_14_Valley7.png" /></td><td>Valley</td></tr></table>': layer_RoofLines_14,'<img src="legend/BuildingsNG_13.png" /> BuildingsNG': layer_BuildingsNG_13,'<img src="legend/Garages_12.png" /> Garages': layer_Garages_12,'<img src="legend/Driveway_11.png" /> Driveway': layer_Driveway_11,"Southern Area2_georeferenced": layer_SouthernArea2_georeferenced_10,"Northern Area2a_georeferenced": layer_NorthernArea2a_georeferenced_9,"TM45NW": layer_TM45NW_8,"TM45SW": layer_TM45SW_7,"TM45SE": layer_TM45SE_6,"TM45NE": layer_TM45NE_5,"TM23NE": layer_TM23NE_4,"TM33NW": layer_TM33NW_3,"TM33NE": layer_TM33NE_2,"TM35SE": layer_TM35SE_1,"TM35NE": layer_TM35NE_0,}).addTo(map);
         setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Control": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Control = document.createElement('div');
+            div_Control.id = "div_Control";
+            div_Control.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Control);
+            sel_Control = document.createElement('select');
+            sel_Control.multiple = true;
+            sel_Control.size = 6;
+            sel_Control.id = "sel_Control";
+            var Control_options_str = "<option value='' unselected></option>";
+            sel_Control.onchange = function(){filterFunc()};
+            Control_options_str  += '<option value="NULL">NULL</option>';
+            Control_options_str  += '<option value="Light Sensor">Light Sensor</option>';
+            Control_options_str  += '<option value="Light_Motion Sensor">Light_Motion Sensor</option>';
+            Control_options_str  += '<option value="Motion Sensor">Motion Sensor</option>';
+            Control_options_str  += '<option value="PIR Motion Sensor">PIR Motion Sensor</option>';
+            Control_options_str  += '<option value="Timer">Timer</option>';
+            sel_Control.innerHTML = Control_options_str;
+            div_Control.appendChild(sel_Control);
+            var lab_Control = document.createElement('div');
+            lab_Control.innerHTML = 'Control';
+            lab_Control.className = 'filterlabel';
+            div_Control.appendChild(lab_Control);
+            var reset_Control = document.createElement('div');
+            reset_Control.innerHTML = 'clear filter';
+            reset_Control.className = 'filterlabel';
+            reset_Control.onclick = function() {
+                var options = document.getElementById("sel_Control").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Control.appendChild(reset_Control);
         L.ImageOverlay.include({
             getBounds: function () {
                 return this._bounds;
